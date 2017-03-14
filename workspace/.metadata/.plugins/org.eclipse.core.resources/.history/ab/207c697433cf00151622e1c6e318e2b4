@@ -1,0 +1,35 @@
+package permutation;
+
+import java.util.ArrayList;
+
+public class permutationString {
+	
+	static ArrayList<String> permutation(String str, int size ) {
+		ArrayList<String> nStr = new ArrayList<String>();
+		
+		if ( str.length() == 1 ) {
+			nStr.add(str);
+		} else {
+			permutation(str.substring(1));
+			for ( String allStr : nStr ) {
+				for (int i = 0; i < allStr.length(); i++) {
+					StringBuffer newStr = new StringBuffer (allStr);
+					newStr.insert(i, str.substring(0,1));
+					System.out.println("jj : " + newStr.toString());
+					nStr.add(newStr.toString());
+				}
+			}
+		}
+		//System.out.println("str : " + str);
+		return nStr;
+	}
+	
+	public static void main (String args[]) {
+		String str = new String("apud");
+		ArrayList<String> test = permutation(str, str.length() );
+		for ( String arr : test ) {
+			System.out.println("arr : " + arr);
+		}
+		
+	}
+}

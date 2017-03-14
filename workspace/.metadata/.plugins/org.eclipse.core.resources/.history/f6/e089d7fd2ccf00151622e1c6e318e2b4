@@ -1,0 +1,22 @@
+package permutation;
+
+import java.util.ArrayList;
+
+public class permutationString {
+	
+	static String[] permutation(String str) {
+		ArrayList<String> nStr = new ArrayList<String>();
+		
+		if ( str.length() == 1 ) {
+			nStr[0] = str;
+		} else {
+			
+		}
+		
+	}
+	
+	public static void main (String args[]) {
+		String str = "apud";
+		permutation(str);
+	}
+}

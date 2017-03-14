@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;setOfStack.SetofStacks.java&apos; to &apos;SetOfStacks.java&apos;&#x0D;&#x0A;- Original project: &apos;setOfStack&apos;&#x0D;&#x0A;- Original element: &apos;setOfStack.SetofStacks.java&apos;&#x0D;&#x0A;- Renamed element: &apos;setOfStack.SetOfStacks.java&apos;" description="Rename compilation unit &apos;SetofStacks.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src&lt;setOfStack{SetofStacks.java" name="SetOfStacks.java" references="false" stamp="1456220626069" version="1.0"/>
+</session>

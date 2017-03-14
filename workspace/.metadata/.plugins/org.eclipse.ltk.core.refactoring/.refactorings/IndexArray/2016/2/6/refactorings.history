@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;indexArray.arrayIndex&apos; to &apos;ArrayIndex&apos;&#x0D;&#x0A;- Original project: &apos;IndexArray&apos;&#x0D;&#x0A;- Original element: &apos;indexArray.arrayIndex&apos;&#x0D;&#x0A;- Renamed element: &apos;indexArray.ArrayIndex&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;arrayIndex&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;indexArray{arrayIndex.java[arrayIndex" matchStrategy="1" name="ArrayIndex" qualified="false" references="true" similarDeclarations="false" stamp="1454945015354" textual="false" version="1.0"/>
+</session>

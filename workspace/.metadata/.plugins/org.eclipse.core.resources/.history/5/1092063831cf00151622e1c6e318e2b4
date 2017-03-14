@@ -1,0 +1,27 @@
+package permutation;
+
+import java.util.ArrayList;
+
+public class permutationString {
+	
+	static String[] permutation(String str) {
+		ArrayList<String> nStr = new ArrayList<String>();
+		
+		if ( str.length() == 1 ) {
+			nStr.add(str);
+		} else {
+			str = str.toString().substring(1);
+			for ( String allStr : nStr ) {
+				for (int i = 0; i < allStr.length(); i++) {
+					nStr.add()
+				}
+			}
+		}
+		
+	}
+	
+	public static void main (String args[]) {
+		String str = new String("apud");
+		permutation(str);
+	}
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;diGraph.DiGraph.java&apos; to &apos;Digraph.java&apos;&#x0D;&#x0A;- Original project: &apos;diGraph&apos;&#x0D;&#x0A;- Original element: &apos;diGraph.DiGraph.java&apos;&#x0D;&#x0A;- Renamed element: &apos;diGraph.Digraph.java&apos;" description="Rename compilation unit &apos;DiGraph.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src&lt;diGraph{DiGraph.java" name="Digraph.java" references="false" stamp="1457785678171" version="1.0"/>
+</session>

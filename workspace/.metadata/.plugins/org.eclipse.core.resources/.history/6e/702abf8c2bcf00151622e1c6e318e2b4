@@ -1,0 +1,18 @@
+package permutation;
+
+public class permutationString {
+	
+	static String[] permutation(String str) {
+		String[] nStr = {""};
+		
+		if ( str.length() == 1 ) {
+			nStr[0] = str;
+		}
+
+	}
+	
+	public static void main (String args[]) {
+		String str = "apud";
+		permutation(str);
+	}
+}

@@ -1,0 +1,168 @@
+package chineseChar;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.regex.*;
+
+public class ReadFile {
+	
+	private String pathToReadFrom;
+	private String pathToWriteTo;
+	private String indent;
+	
+	public ReadFile(String pathFrom, String pathTo) {
+		this.pathToReadFrom = pathFrom;
+		this.pathToWriteTo = pathTo;
+		this.indent = "\t";
+	}
+	
+	public void OpenFile() throws IOException {
+		
+		BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(pathToReadFrom), "utf-8"));
+		PrintWriter writer = new PrintWriter(pathToWriteTo, "utf-8");
+	
+		writer.println("\"dict\" : [");
+		
+		String line;
+		while ( (line = bf.readLine()) != null ) {
+			writer.println(createEntry(writer, line));
+		}
+		
+		writer.println("]");
+		writer.close();
+		bf.close();
+	
+	}
+	
+	public String createEntry(PrintWriter writer, String line) {		
+		Pattern pFreq = Pattern.compile("<TR><TD ALIGN=\"CENTER\">(.*?)</TD>");
+		Pattern pChar = Pattern.compile("2>(\\p{L})</FONT>");
+		Pattern pCharT = Pattern.compile("F<FONT SIZE=\\+2>(\\p{L})</FONT>");
+
+		
+		Matcher mFreq = pFreq.matcher(line);
+		Matcher mChar = pChar.matcher(line);
+		Matcher mCharT = pCharT.matcher(line);
+
+		String indent2 = indent + indent;
+		
+		String entry = indent + "{\n";
+		entry += indent2 + "\"id\" : \"" + (mFreq.find() ? mFreq.group(1) : "") + "\",\n";
+		entry += indent2 + "\"simplified\" : \"" + (mChar.find() ? mChar.group(1) : "") + "\",\n";
+		if ( mCharT.find() ) {
+			entry += indent2 + "\"traditional\" : \"" + mCharT.group(1) + "\",\n";
+		}
+		entry += indent2 + "\"meanings\" : [\n";
+		entry += createExplanation(writer, line);
+		entry += indent2 + "],\n";
+		entry += indent + "},\n";
+		
+		return entry;
+	}
+	
+	public String createExplanation(PrintWriter writer, String line) {
+		
+		String explanation = "";
+		String indent3 = indent + indent + indent;
+		String indent4 = indent3 + indent;
+		
+		int i = 1;
+		
+	    Pattern pExplanation = Pattern.compile("(<TD>|<BR>|)\\[(.*?)\\](.*?)<(\\/TD|BR)>");
+	    Matcher m = pExplanation.matcher(line);
+	    while ( m.find() ) {
+		    explanation += indent3 + "{\n";
+	    	explanation += indent4 + "\"id\" : \"" + (i++) + "\",\n";
+	    	explanation += indent4 + "\"tone\" : "  + "\"" + m.group(2) + "\",\n";
+	    	explanation += indent4 + "\"example\" : {\n" + createExample(writer, m.group(3)) + "\n";
+	    	explanation += indent4 + "},\n";
+		    explanation += indent3 + "},\n";
+	    }
+	    return explanation;
+	}
+	
+	public String createExample(PrintWriter writer, String line) {
+		
+		String example = "";
+		String translation = "";
+		String indent5 = indent + indent + indent + indent + indent;
+		String indent6 = indent5 + indent;
+		String indent7 = indent6 + indent;
+		String indent8 = indent7 + indent;
+		
+		//replace &GT; &LT; </FONT> by ""
+		line = line.replaceAll("&GT;", ")");
+		line = line.replaceAll("&LT;", "(");
+		line = line.replaceAll("<\\/FONT>", "");
+		
+		// get first translation/explanation
+		translation = line.substring(0, line.indexOf(";") != -1 ? line.indexOf(";") : 0);
+		
+		// remove first translation
+		line = line.replaceFirst("(.*?);", "");
+		
+		String a_pinyin = "\\x{0101}|\\x{00E1}|\\x{01CE}|\\x{00E0}|";
+		String e_pinyin = "\\x{0113}|\\x{00E9}|\\x{011B}|\\x{00E8}|";
+		String i_pinyin = "\\x{012B}|\\x{00ED}|\\x{01D0}|\\x{00EC}|";
+		String o_pinyin = "\\x{014D}|\\x{00F3}|\\x{01D2}|\\x{00F2}|";
+		String u_pinyin = "\\x{016B}|\\x{00FA}|\\x{01D4}|\\x{00F9}";
+		
+		String pinyin = a_pinyin + e_pinyin + i_pinyin + o_pinyin + u_pinyin;
+		
+		int i =1;
+		
+		Pattern pExample = Pattern.compile("([\\p{IsHan}.?!]+)((\\s*[a-zA-Z.?,!\\-]*(" + pinyin + ")[a-zA-Z.?,!\\-]*)*)([\\s\\'a-zA-Z.,?!\\(\\)]*)");
+	    Matcher m = pExample.matcher(line);
+	    
+	    System.out.println("translation");
+	    
+    	if ( !translation.equals("") && m.find() ) {
+	    	example += indent5 + "\"translation\" : \"" + translation.trim() + "\",\n";
+    	}
+	    
+    	if ( m.find() ) {
+        	example += indent5 + "\"sentences\" : [\n";
+        	
+    	    while ( m.find() ) {
+    	    	
+    	    	// phrase in chinese
+    	    	example += indent6 + "{\n";
+    	    	example += indent7 +  "\"" + (i++) + "\" : { \n";
+    	    	example += indent8 + "\"cn\" : \"" + m.group(1).trim() + "\",\n";
+    	    	
+    	    	// phrase in pinyin
+    	    	example += indent8 + "\"pn\" : \"" + m.group(2).trim() + "\",\n";
+    	    	
+    	    	// phrase in english
+    	    	example += indent8 + "\"en\" : \"" + m.group(5).trim() + "\",\n";
+    	    	example += indent8 +  "},\n";
+    	    	example += indent6 + "},\n";
+    	    	
+    	    	translation = "";
+    	    }
+    	        
+    	    example += indent5 + "],\n";	
+    	} else {
+    		example += indent5 + "\"translation\" : \"" + line.trim() + "\",\n";
+    	}
+		
+		return example;
+	}
+	
+	public static void main(String args[]) throws IOException {
+		
+		String pathFrom = "D:/Users/vicbusa/workspace/chineseChar/src/chineseChar/char_test.html"; //most_common_chinese_
+		String pathTo = "D:/Users/vicbusa/workspace/chineseChar/src/chineseChar/cn3000.js"; 
+		
+		try {
+			ReadFile file = new ReadFile(pathFrom, pathTo);
+			file.OpenFile();
+		} catch ( IOException e ) {
+			System.out.println( e.getMessage() );
+		}
+	}
+	
+}

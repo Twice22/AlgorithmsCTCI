@@ -1,0 +1,7 @@
+package chineseChar;
+
+public class ReadFile {
+	
+	ReadFile ( )
+	
+}
